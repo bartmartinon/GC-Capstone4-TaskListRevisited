@@ -1,0 +1,14 @@
+﻿@{
+    ViewData["Title"] = "Log In";
+}
+@model List<User>
+
+<h2>Log In</h2>
+
+<form method="post">
+    <b>Email</b>:<input type="email" name="Email" required /><br />
+    <b>Password</b>:<input type="password" name="Password" required /><br />
+    <input type="submit" value="Log In" />
+</form>
+
+<p>@ViewBag.logMsg</p>
