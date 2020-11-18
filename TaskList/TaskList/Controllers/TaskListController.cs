@@ -33,7 +33,7 @@ namespace TaskList.Controllers
                     ViewBag.UserId = u.Id;
                     ViewBag.logMsg = $"User ID{u.Id} found!";
                     return View();
-                    //return RedirectToAction("TaskView", u.Id);
+                    //return RedirectToAction("TaskListView", u);
                 }
             }
             ViewBag.logMsg = "Incorrect Email/Password";
@@ -57,19 +57,24 @@ namespace TaskList.Controllers
                     if (existingUser.Email == U.Email)
                     {
                         ViewBag.logMsg = $"User {U.Email} already in system. Please log in instead.";
-                        return View("NewUser");
+                        return View("NewUser", U);
                     }
                 }
                 _db.Users.Add(U);
                 _db.SaveChanges();
-                ViewBag.logMsg = $"New User {U.Email} added to system! You can now log in!";
-                return View("LogIn");
+                return RedirectToAction("LogIn");
             }
             else
             {
                 ViewBag.logMsg = "Invalid format.";
-                return View("NewUser");
+                return View("NewUser", U);
             }
+        }
+
+        public IActionResult TaskListView(User U)
+        {
+            ViewBag.logMsg = "Ready";
+            return View();
         }
     }
 }

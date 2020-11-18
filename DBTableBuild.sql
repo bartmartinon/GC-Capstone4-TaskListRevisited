@@ -24,3 +24,6 @@ VALUES ('barthelemy.martinon@gmail.com','bartpassword'),
 INSERT INTO ToDoItems(UserId,[Description],DeadLine,IsDone)
 VALUES (1,'Get a new task manager web app developped.','11/23/2020',0),
 (2,'Exist!','11/19/2020',0)
+
+-- Users cleanup
+DELETE FROM Users WHERE Id > 2;
