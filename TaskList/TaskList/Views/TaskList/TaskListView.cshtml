@@ -1,0 +1,28 @@
+﻿@{
+    ViewData["Title"] = "Task List";
+}
+@model List<ToDoItem>
+
+<h2>Tasks for User @ViewBag.CurrentUser.Email</h2>
+<hr style="height:3px" />
+<table style="text-align: center">
+    <tr>
+        <th>Task ID</th>
+        <th>Description</th>
+        <th>Deadline</th>
+        <th>Done?</th>
+        <th>Toggle Done/Not Done</th>
+        <th>Delete</th>
+    </tr>
+    @foreach (ToDoItem t in Model)
+    {
+        <tr>
+            <td>@t.Id</td>
+            <td>@t.Description</td>
+            <td>@t.Deadline.ToShortDateString()</td>
+            <td>@t.IsDone</td>
+            <td><a class="nav-link text-dark" asp-area="" asp-controller="TaskList" asp-action="ToggleTask(@t.Id)">Toggle</a></td>
+            <td><a class="nav-link text-dark" asp-area="" asp-controller="TaskList" asp-action="DeleteTask(@t.Id)">Delete</a></td>
+        </tr>
+    }
+</table>

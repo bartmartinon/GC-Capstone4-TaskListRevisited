@@ -30,10 +30,7 @@ namespace TaskList.Controllers
             {
                 if (Email.Equals(u.Email) && Password.Equals(u.Password))
                 {
-                    ViewBag.UserId = u.Id;
-                    ViewBag.logMsg = $"User ID{u.Id} found!";
-                    return View();
-                    //return RedirectToAction("TaskListView", u);
+                    return RedirectToAction("TaskListView", u);
                 }
             }
             ViewBag.logMsg = "Incorrect Email/Password";
@@ -73,8 +70,17 @@ namespace TaskList.Controllers
 
         public IActionResult TaskListView(User U)
         {
-            ViewBag.logMsg = "Ready";
-            return View();
+            ViewBag.CurrentUser = U;
+            List<ToDoItem> ToDoList = _db.ToDoItems.ToList();
+            List<ToDoItem> ToDoListUser = new List<ToDoItem>();
+            foreach (ToDoItem t in ToDoList)
+            {
+                if (t.UserId == U.Id)
+                {
+                    ToDoListUser.Add(t);
+                }
+            }
+            return View(ToDoListUser);
         }
     }
 }
