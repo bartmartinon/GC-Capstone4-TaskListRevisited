@@ -15,6 +15,7 @@ namespace TaskList.Controllers
             _db = db;
         }
 
+        // LogIn
         public IActionResult LogIn()
         {
             ViewBag.logMsg = "Ready";
@@ -30,21 +31,23 @@ namespace TaskList.Controllers
             {
                 if (Email.Equals(u.Email) && Password.Equals(u.Password))
                 {
-                    return RedirectToAction("TaskListView", u);
+                    TempData["uID"] = u.Id;
+                    return RedirectToAction("TaskListView");
                 }
             }
             ViewBag.logMsg = "Incorrect Email/Password";
             return View(Users);
         }
 
-        public IActionResult NewUser()
+        // NewUser
+        public IActionResult CreateUser()
         {
             ViewBag.logMsg = "Ready";
             return View();
         }
 
         [HttpPost]
-        public IActionResult NewUser(User U)
+        public IActionResult CreateUser(User U)
         {
             if (ModelState.IsValid)
             {
@@ -54,7 +57,7 @@ namespace TaskList.Controllers
                     if (existingUser.Email == U.Email)
                     {
                         ViewBag.logMsg = $"User {U.Email} already in system. Please log in instead.";
-                        return View("NewUser", U);
+                        return View("CreateUser", U);
                     }
                 }
                 _db.Users.Add(U);
@@ -64,12 +67,14 @@ namespace TaskList.Controllers
             else
             {
                 ViewBag.logMsg = "Invalid format.";
-                return View("NewUser", U);
+                return View("CreateUser", U);
             }
         }
 
-        public IActionResult TaskListView(User U)
+        // TaskListView
+        public IActionResult TaskListView()
         {
+            User U = _db.Users.Find(TempData["uID"]);
             ViewBag.CurrentUser = U;
             List<ToDoItem> ToDoList = _db.ToDoItems.ToList();
             List<ToDoItem> ToDoListUser = new List<ToDoItem>();
@@ -80,7 +85,40 @@ namespace TaskList.Controllers
                     ToDoListUser.Add(t);
                 }
             }
+            TempData["uID"] = U.Id;
             return View(ToDoListUser);
+        }
+
+        public IActionResult ToggleTask(int Id)
+        {
+            ToDoItem t = _db.ToDoItems.Find(Id);
+            User u = _db.Users.Find(t.UserId);
+            t.IsDone = !t.IsDone;
+            _db.ToDoItems.Update(t);
+            _db.SaveChanges();
+            TempData["uID"] = u.Id;
+            return RedirectToAction("TaskListView");
+        }
+
+        // TODO: DeleteTask Action
+
+        // NewTask
+        public IActionResult CreateTask()
+        {
+            User U = _db.Users.Find(TempData["uID"]);
+            ViewBag.CurrentUser = U;
+            TempData["uID"] = U.Id;
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult CreateTask(ToDoItem T)
+        {
+            _db.ToDoItems.Add(T);
+            _db.SaveChanges();
+            User U = _db.Users.Find(TempData["uID"]);
+            TempData["uID"] = U.Id;
+            return RedirectToAction("TaskListView");
         }
     }
 }

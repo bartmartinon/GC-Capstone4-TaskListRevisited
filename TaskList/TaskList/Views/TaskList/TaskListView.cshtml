@@ -11,8 +11,7 @@
         <th>Description</th>
         <th>Deadline</th>
         <th>Done?</th>
-        <th>Toggle Done/Not Done</th>
-        <th>Delete</th>
+        <th colspan="2">Functions</th>
     </tr>
     @foreach (ToDoItem t in Model)
     {
@@ -20,9 +19,18 @@
             <td>@t.Id</td>
             <td>@t.Description</td>
             <td>@t.Deadline.ToShortDateString()</td>
-            <td>@t.IsDone</td>
-            <td><a class="nav-link text-dark" asp-area="" asp-controller="TaskList" asp-action="ToggleTask(@t.Id)">Toggle</a></td>
-            <td><a class="nav-link text-dark" asp-area="" asp-controller="TaskList" asp-action="DeleteTask(@t.Id)">Delete</a></td>
+            @if (t.IsDone) {
+                <td style="color:green">@t.IsDone</td>
+            }
+            else
+            {
+                <td style="color:red">@t.IsDone</td>
+            }
+            <td><a class="nav-link text-dark" style="background-color:darkorange" asp-area="" asp-controller="TaskList" asp-action="ToggleTask" asp-route-id="@t.Id">Toggle</a></td>
+            <td><a class="nav-link text-dark" style="background-color:red" asp-area="" asp-controller="TaskList" asp-action="DeleteTask" asp-route-id="@t.Id">Delete</a></td>
         </tr>
     }
+<tr>
+    <td colspan="6"><a class="nav-link text-dark" style="background-color:forestgreen" asp-area="" asp-controller="TaskList" asp-action="CreateTask">New Task</a></td>
+</tr>
 </table>

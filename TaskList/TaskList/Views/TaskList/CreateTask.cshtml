@@ -1,0 +1,16 @@
+﻿@{
+    ViewData["Title"] = "New Task";
+}
+@model ToDoItem
+
+<h2>New Task for User @ViewBag.CurrentUser.Email</h2>
+
+<form method="post">
+    <input type="hidden" name="UserId" value="@ViewBag.CurrentUser.Id" />
+    <b>Description:</b><br />
+    <input type="text" name="Description" maxlength="100" size="100" required /><br />
+    <b>Deadline:</b><br />
+    <input type="date" name="Deadline" min="@DateTime.Now.ToShortDateString()" required /><br />
+    <input type="hidden" name="IsDone" value="0" />
+    <input type="submit" value="Create New Task" />
+</form>
