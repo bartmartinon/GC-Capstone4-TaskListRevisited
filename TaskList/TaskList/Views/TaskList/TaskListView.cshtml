@@ -3,6 +3,65 @@
 }
 @model List<ToDoItem>
 
+<style>
+
+    a.newtask {
+        background-color: forestgreen;
+        border: none;
+        border-radius: 5px;
+        color: white;
+        cursor: pointer;
+        display: inline-block;
+        margin: 5px;
+        padding: 5px;
+        text-align: center;
+        text-decoration: none;
+    }
+    
+    button {
+        border: none;
+        border-radius: 5px;
+        color: white;
+        cursor: pointer;
+        display: inline-block;
+        margin: 5px 5px;
+        text-align: center;
+        text-decoration: none;
+    }
+
+    button.toggletask {
+        background-color: darkorange;
+    }
+
+    button.deletetask {
+        background-color: red;
+    }
+    
+    table {
+        width: 100%
+    }
+
+    table, th, tr, td {
+        border: 1px solid #333333;
+    }
+
+    td {
+        padding: 2px;
+    }
+
+    th {
+        background-color: #888888;
+    }
+
+    tr {
+        background-color: #DDDDDD;
+    }
+
+    tr.late {
+        background-color: #f7f762;
+    }
+</style>
+
 <h2>Tasks for User @ViewBag.CurrentUser.Email</h2>
 <hr style="height:3px" />
 <div>
@@ -10,8 +69,8 @@
     <form method="post">
         <select name="sortOrder">
             <option value="id" selected>ID</option>
-            <option value="deadline" selected>Date</option>
-            <option value="isdone" selected>Completion</option>
+            <option value="deadline">Date</option>
+            <option value="isdone">Completion</option>
         </select>
         <input type="submit" value="Go"/>
     </form>
@@ -26,22 +85,45 @@
     </tr>
     @foreach (ToDoItem t in Model)
     {
-        <tr>
-            <td>@t.Id</td>
-            <td>@t.Description</td>
-            <td>@t.Deadline.ToShortDateString()</td>
-            @if (t.IsDone) {
-                <td style="color:green">@t.IsDone</td>
-            }
-            else
-            {
-                <td style="color:red">@t.IsDone</td>
-            }
-            <td><a class="nav-link text-dark" style="background-color:darkorange" asp-area="" asp-controller="TaskList" asp-action="ToggleTask" asp-route-id="@t.Id">Toggle</a></td>
-            <td><a class="nav-link text-dark" style="background-color:red" asp-area="" asp-controller="TaskList" asp-action="DeleteTask" asp-route-id="@t.Id">Delete</a></td>
-        </tr>
+        if (DateTime.Compare(DateTime.Now, t.Deadline) > 0)
+        {
+            <tr class="late">
+                <td><b>@t.Id</b></td>
+                <td>@t.Description</td>
+                <td>@t.Deadline.ToShortDateString()</td>
+                @if (t.IsDone)
+                {
+                    <td style="color:green">@t.IsDone</td>
+                }
+                else
+                {
+                    <td style="color:red">@t.IsDone</td>
+                }
+                <td><form asp-area="" asp-controller="TaskList" asp-action="ToggleTask" asp-route-id="@t.Id"><button class="toggletask">Toggle</button></form></td>
+                <td><form asp-area="" asp-controller="TaskList" asp-action="DeleteTask" asp-route-id="@t.Id"><button class="deletetask">Delete</button></form></td>
+            </tr>
+        }
+        else
+        {
+            <tr>
+                <td>@t.Id</td>
+                <td>@t.Description</td>
+                <td>@t.Deadline.ToShortDateString()</td>
+                @if (t.IsDone)
+                {
+                    <td style="color:green">@t.IsDone</td>
+                }
+                else
+                {
+                    <td style="color:red">@t.IsDone</td>
+                }
+                
+                <td><form asp-area="" asp-controller="TaskList" asp-action="ToggleTask" asp-route-id="@t.Id"><button class="toggletask">Toggle</button></form></td>
+                <td><form asp-area="" asp-controller="TaskList" asp-action="DeleteTask" asp-route-id="@t.Id"><button class="deletetask">Delete</button></form></td>
+            </tr>
+        }
     }
-<tr>
-    <td colspan="6"><a class="nav-link text-dark" style="background-color:forestgreen" asp-area="" asp-controller="TaskList" asp-action="CreateTask">New Task</a></td>
-</tr>
+    <tr>
+        <td colspan="6"><a class="newtask" asp-area="" asp-controller="TaskList" asp-action="CreateTask">New Task</a></td>
+    </tr>
 </table>

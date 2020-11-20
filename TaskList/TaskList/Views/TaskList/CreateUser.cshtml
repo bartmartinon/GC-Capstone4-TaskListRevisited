@@ -3,23 +3,37 @@
 }
 @model User
 
+<style>
+    div {
+        width: 300px;
+        clear: both;
+    }
+
+    div input {
+        width: 100%;
+        clear: both;
+    }
+</style>
+
 <h2>Sign Up</h2>
 
 <p><b>Email</b> must be a valid email address and no more than 50 characters long.</p>
 <p><b>Password</b> must satisfy the following requirements:</p>
 <ul>
     <li>Must be between 8 and 50 characters long.</li>
-    @*<li>Contains at least one digit. (0-9)</li>
+    <li>Contains at least one digit. (0-9)</li>
     <li>Contains at least one uppercase letter. (A-Z)</li>
     <li>Contains at least one lowercase letter. (a-z)</li>
-    <li>Contains at least one special character which includes <b>!#$%&*()-+=^</b>.</li>
-    <li>Contains no whitespaces.</li>*@
+    <li>Contains no whitespaces.</li>
 </ul>
 
-<form method="post">
-    <b>Email</b>:<input type="email" name="Email" required />@Html.ValidationMessageFor(m => m.Email, "", new { @style = "color:red; font-weight: bold;" })<br />
-    <b>Password</b>:<input type="password" name="Password" required />@Html.ValidationMessageFor(m => m.Password, "", new { @style = "color:red; font-weight: bold;" })<br />
-    <input type="submit" value="Create Account" />
-</form>
+<div>
+    <form method="post">
+        <b>   Email</b>:<input type="email" name="Email" required />@Html.ValidationMessageFor(m => m.Email, "", new { @style = "color:red; font-weight: bold;" })<br />
+        <b>Password</b>:<input type="password" name="Password" required />@Html.ValidationMessageFor(m => m.Password, "", new { @style = "color:red; font-weight: bold;" })<br />
+        <br />
+        <input type="submit" value="Create Account" />
+    </form>
+</div>
 
 <p>@ViewBag.logMsg</p>

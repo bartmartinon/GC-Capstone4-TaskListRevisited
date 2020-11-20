@@ -3,14 +3,42 @@
 }
 @model List<User>
 
+<style>
+    a#newuser {
+        background-color: forestgreen;
+        border: none;
+        border-radius: 5px;
+        color: white;
+        cursor: pointer;
+        display: inline-block;
+        margin: 5px;
+        padding: 5px;
+        text-align: center;
+        text-decoration: none;
+    }
+    
+    div {
+        width: 300px;
+        clear: both;
+    }
+
+    div input {
+        width: 100%;
+        clear: both;
+    }
+</style>
+
 <h2>Log In</h2>
 
-<form method="post">
-    <b>Email</b>:<input type="email" name="Email" required /><br />
-    <b>Password</b>:<input type="password" name="Password" required /><br />
-    <input type="submit" value="Log In" />
-</form>
+<div>
+    <form method="post">
+        <b>Email</b>:<input type="email" name="Email" required /><br />
+        <b>Password</b>:<input type="password" name="Password" required /><br />
+        <br />
+        <input type="submit" value="Log In" />
+    </form>
+</div>
 
 <p>@ViewBag.logMsg</p>
 
-<a href="CreateUser">Create New Account</a>
+<a id="newuser" href="CreateUser">Create New Account</a>
