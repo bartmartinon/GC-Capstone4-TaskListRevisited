@@ -5,6 +5,17 @@
 
 <h2>Tasks for User @ViewBag.CurrentUser.Email</h2>
 <hr style="height:3px" />
+<div>
+    <b>Sort By: </b>
+    <form method="post">
+        <select name="sortOrder">
+            <option value="id" selected>ID</option>
+            <option value="deadline" selected>Date</option>
+            <option value="isdone" selected>Completion</option>
+        </select>
+        <input type="submit" value="Go"/>
+    </form>
+</div>
 <table style="text-align: center">
     <tr>
         <th>Task ID</th>

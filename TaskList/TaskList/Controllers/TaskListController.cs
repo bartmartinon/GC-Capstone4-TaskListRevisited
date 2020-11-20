@@ -72,7 +72,7 @@ namespace TaskList.Controllers
         }
 
         // TaskListView
-        public IActionResult TaskListView()
+        public IActionResult TaskListView(string sortOrder)
         {
             User U = _db.Users.Find(TempData["uID"]);
             ViewBag.CurrentUser = U;
@@ -85,6 +85,22 @@ namespace TaskList.Controllers
                     ToDoListUser.Add(t);
                 }
             }
+
+            switch (sortOrder)
+            {
+                case "id":
+                    ToDoListUser = ToDoListUser.OrderBy(x => x.Id).ToList();
+                    break;
+                case "deadline":
+                    ToDoListUser = ToDoListUser.OrderBy(x => x.Deadline).ToList();
+                    break;
+                case "isdone":
+                    ToDoListUser = ToDoListUser.OrderBy(x => x.IsDone).ToList();
+                    break;
+                default:
+                    break;
+            }
+
             TempData["uID"] = U.Id;
             return View(ToDoListUser);
         }
@@ -100,9 +116,17 @@ namespace TaskList.Controllers
             return RedirectToAction("TaskListView");
         }
 
-        // TODO: DeleteTask Action
+        public IActionResult DeleteTask(int Id)
+        {
+            ToDoItem t = _db.ToDoItems.Find(Id);
+            User u = _db.Users.Find(t.UserId);
+            _db.ToDoItems.Remove(t);
+            _db.SaveChanges();
+            TempData["uID"] = u.Id;
+            return RedirectToAction("TaskListView");
+        }
 
-        // NewTask
+        // CreateTask
         public IActionResult CreateTask()
         {
             User U = _db.Users.Find(TempData["uID"]);
