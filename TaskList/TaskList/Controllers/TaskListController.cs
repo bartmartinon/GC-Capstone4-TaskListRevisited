@@ -16,6 +16,7 @@ namespace TaskList.Controllers
         }
 
         // LogIn
+        // Set up the Log In page.
         public IActionResult LogIn()
         {
             ViewBag.logMsg = "Ready";
@@ -23,6 +24,8 @@ namespace TaskList.Controllers
             return View(Users);
         }
 
+        // Check to see if the given values for the form match an existing User's.
+        // If so, move on to the User's appropriate TaskListView. Otherwise, loop back to the Log In page.
         [HttpPost]
         public IActionResult LogIn(string Email, string Password)
         {
@@ -40,12 +43,16 @@ namespace TaskList.Controllers
         }
 
         // NewUser
+        // Set up the Create User page.
         public IActionResult CreateUser()
         {
             ViewBag.logMsg = "Ready";
             return View();
         }
 
+        // On form submit, take the input and see if there is already an existing user with the given email. 
+        //   If so, loop back to Create User without doing anything aside from updating the log message.
+        //   Otherwise, as long as the input criteria are met (or else nothing happens), create a new User entry for the database. 
         [HttpPost]
         public IActionResult CreateUser(User U)
         {
@@ -72,6 +79,11 @@ namespace TaskList.Controllers
         }
 
         // TaskListView
+        // Ready and display the TaskListView, which shows a list of ToDoItems that belong to the user that is logged in.
+        // Depending on the given string for a sortOrder, the list of ToDoItems will be organized by ID by default, but can be organized by their
+        //   Deadline or IsDone values.
+        // The view is reloaded everytime the "Go!" button above the table is clicked.
+        // ToDoItems that are past the given date will be different visual-wise compared to other entries.
         public IActionResult TaskListView(string sortOrder)
         {
             User U = _db.Users.Find(TempData["uID"]);
@@ -105,6 +117,7 @@ namespace TaskList.Controllers
             return View(ToDoListUser);
         }
 
+        // Clicking on a ToDoItem's "Toggle" button will toggle the IsDone value from true to false, and vice versa.
         public IActionResult ToggleTask(int Id)
         {
             ToDoItem t = _db.ToDoItems.Find(Id);
@@ -116,6 +129,7 @@ namespace TaskList.Controllers
             return RedirectToAction("TaskListView");
         }
 
+        // Clicking on a ToDoItem's "Delete" button will remove the entry from the list.
         public IActionResult DeleteTask(int Id)
         {
             ToDoItem t = _db.ToDoItems.Find(Id);
@@ -127,6 +141,7 @@ namespace TaskList.Controllers
         }
 
         // CreateTask
+        // Sets up the CreateTask view while grabbing the current User's ID for filling out new ToDoItem values (hidden inputs)
         public IActionResult CreateTask()
         {
             User U = _db.Users.Find(TempData["uID"]);
@@ -135,6 +150,7 @@ namespace TaskList.Controllers
             return View();
         }
 
+        // On form post, create a new ToDoItem and add it to the ToDoItems table on the database, and then redirect back to the user's appropriate TaskListView.
         [HttpPost]
         public IActionResult CreateTask(ToDoItem T)
         {
